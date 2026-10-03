@@ -1,0 +1,12 @@
+target/
+nbproject/private/
+
+*.class
+*.log
+
+.idea/
+*.iml
+
+.DS_Store
+Thumbs.db
+config.properties
