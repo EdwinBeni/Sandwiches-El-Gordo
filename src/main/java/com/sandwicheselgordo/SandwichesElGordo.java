@@ -1,70 +1,64 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package com.sandwicheselgordo;
 
-import com.sandwicheselgordo.util.ConexionOracle;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.sandwicheselgordo.dao.ClienteDAO;
+import com.sandwicheselgordo.dao.ProductoDAO;
+import com.sandwicheselgordo.modelo.Cliente;
+import com.sandwicheselgordo.modelo.Producto;
 
-
-/**
- *
- * @author PC
- */
 public class SandwichesElGordo {
 
-  
     public static void main(String[] args) {
-        
-          String sql = """
-                     SELECT CODIGO,
-                            NOMBRE,
-                            PRECIO,
-                            EXISTENCIA
-                     FROM PRODUCTO
-                     ORDER BY CODIGO
-                     """;
 
         System.out.println("==============================");
         System.out.println("     SANDWICHES EL GORDO");
         System.out.println("==============================");
 
-        try (
-                Connection conexion =
-                        ConexionOracle.getConexion();
+        ProductoDAO productoDAO = new ProductoDAO();
 
-                PreparedStatement ps =
-                        conexion.prepareStatement(sql);
+        System.out.println();
+        System.out.println("PRODUCTOS REGISTRADOS:");
+        System.out.println("------------------------------");
 
-                ResultSet rs =
-                        ps.executeQuery()) {
+        for (Producto producto : productoDAO.listar()) {
 
-            System.out.println("Conexion con Oracle exitosa.");
-             System.out.println();
-            System.out.println("PRODUCTOS REGISTRADOS:");
-            System.out.println("------------------------------");
-
-            while (rs.next()) {
-
-                System.out.println(
-                        rs.getString("CODIGO")
-                        + " | "
-                        + rs.getString("NOMBRE")
-                        + " | Q"
-                        + rs.getDouble("PRECIO")
-                        + " | Stock: "
-                        + rs.getInt("EXISTENCIA")
-                );
-            }
-
-        } catch (SQLException e) {
-
-            System.out.println("ERROR AL CONECTAR CON ORACLE:");
-            System.out.println(e.getMessage());
+            System.out.println(
+                    producto.getCodigo()
+                    + " | "
+                    + producto.getNombre()
+                    + " | Q"
+                    + producto.getPrecio()
+                    + " | Stock: "
+                    + producto.getExistencia()
+            );
         }
+
+        ClienteDAO clienteDAO = new ClienteDAO();
+
+        System.out.println();
+        System.out.println("CLIENTES REGISTRADOS:");
+        System.out.println("------------------------------");
+
+        for (Cliente cliente : clienteDAO.listar()) {
+
+            System.out.println(
+                    cliente.getIdentificacion()
+                    + " | "
+                    + cliente.getNombre()
+                    + " | Puntos: "
+                    + cliente.getPuntos()
+                    + " | Estado: "
+                    + (cliente.isActivo()
+                        ? "Activo"
+                        : "Inactivo")
+            );
+        }
+
+        System.out.println();
+        System.out.println("==============================");
+        System.out.println("       SISTEMA INICIADO");
+        System.out.println("==============================");
     }
 }
