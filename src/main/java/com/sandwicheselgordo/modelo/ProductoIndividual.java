@@ -23,9 +23,16 @@ public class ProductoIndividual extends ItemVenta {
     @Override
     public int calcularPuntos() {
 
-        if ("SANDWICH".equalsIgnoreCase(
-                producto.getTipoProducto())) {
+        String tipo = producto.getTipoProducto();
 
+        if (tipo == null) {
+            return 0;
+        }
+
+        tipo = tipo.trim().toUpperCase();
+
+        if (tipo.equals("SANDWICH")
+                || tipo.equals("SANDWICHES")) {
             return 2;
         }
 
