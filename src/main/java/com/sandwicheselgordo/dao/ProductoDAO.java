@@ -22,15 +22,18 @@ public class ProductoDAO {
         List<Producto> productos = new ArrayList<>();
 
         String sql = """
-                SELECT ID_PRODUCTO,
-                       CODIGO,
-                       ID_CATEGORIA,
-                       NOMBRE,
-                       PRECIO,
-                       EXISTENCIA,
-                       ESTADO
-                FROM PRODUCTO
-                ORDER BY CODIGO
+                SELECT P.ID_PRODUCTO,
+                       P.CODIGO,
+                       P.ID_CATEGORIA,
+                       P.NOMBRE,
+                       P.PRECIO,
+                       P.EXISTENCIA,
+                       P.ESTADO,
+                       C.NOMBRE AS TIPO_PRODUCTO
+                FROM PRODUCTO P
+                INNER JOIN CATEGORIA C
+                    ON P.ID_CATEGORIA = C.ID_CATEGORIA
+                ORDER BY P.CODIGO
                 """;
 
         try (
@@ -57,15 +60,18 @@ public class ProductoDAO {
     public Producto buscarPorCodigo(String codigo) {
 
         String sql = """
-                SELECT ID_PRODUCTO,
-                       CODIGO,
-                       ID_CATEGORIA,
-                       NOMBRE,
-                       PRECIO,
-                       EXISTENCIA,
-                       ESTADO
-                FROM PRODUCTO
-                WHERE CODIGO = ?
+                SELECT P.ID_PRODUCTO,
+                       P.CODIGO,
+                       P.ID_CATEGORIA,
+                       P.NOMBRE,
+                       P.PRECIO,
+                       P.EXISTENCIA,
+                       P.ESTADO,
+                       C.NOMBRE AS TIPO_PRODUCTO
+                FROM PRODUCTO P
+                INNER JOIN CATEGORIA C
+                    ON P.ID_CATEGORIA = C.ID_CATEGORIA
+                WHERE P.CODIGO = ?
                 """;
 
         try (
@@ -116,6 +122,7 @@ public class ProductoDAO {
             ps.setString(3, producto.getNombre());
             ps.setDouble(4, producto.getPrecio());
             ps.setInt(5, producto.getExistencia());
+
             ps.setString(
                     6,
                     producto.isActivo() ? "A" : "I"
@@ -208,7 +215,7 @@ public class ProductoDAO {
     private Producto crearProducto(ResultSet rs)
             throws SQLException {
 
-        return new Producto(
+        Producto producto = new Producto(
                 rs.getInt("ID_PRODUCTO"),
                 rs.getString("CODIGO"),
                 rs.getString("NOMBRE"),
@@ -225,5 +232,11 @@ public class ProductoDAO {
                         rs.getString("ESTADO")
                 )
         );
+
+        producto.setTipoProducto(
+                rs.getString("TIPO_PRODUCTO")
+        );
+
+        return producto;
     }
 }
