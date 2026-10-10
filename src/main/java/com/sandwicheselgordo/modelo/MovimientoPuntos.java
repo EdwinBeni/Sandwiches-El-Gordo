@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.sandwicheselgordo.modelo;
 
 import java.time.LocalDateTime;
@@ -21,6 +17,27 @@ public class MovimientoPuntos {
             String tipoMovimiento,
             int puntos,
             String referencia) {
+
+        if (cliente == null) {
+            throw new IllegalArgumentException(
+                "El cliente es obligatorio."
+            );
+        }
+
+        if (tipoMovimiento == null ||
+                (!tipoMovimiento.equals("ACUMULACION") &&
+                 !tipoMovimiento.equals("CANJE"))) {
+
+            throw new IllegalArgumentException(
+                "El tipo debe ser ACUMULACION o CANJE."
+            );
+        }
+
+        if (puntos <= 0) {
+            throw new IllegalArgumentException(
+                "Los puntos deben ser mayores que cero."
+            );
+        }
 
         this.idMovimiento = idMovimiento;
         this.cliente = cliente;
