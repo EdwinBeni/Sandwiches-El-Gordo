@@ -84,6 +84,10 @@ public class FrmPedidos extends JFrame {
     private static final Color BLANCO =
             new Color(245, 241, 232);
 
+    private static final Color VERDE = new Color(25, 135, 84);
+    private static final Color MORADO = new Color(117, 66, 168);
+    private static final Color ROJO = new Color(150, 63, 80);
+
     public FrmPedidos() {
 
         clienteDAO = new ClienteDAO();
@@ -322,8 +326,11 @@ public class FrmPedidos extends JFrame {
 
         tablaDetalles = new JTable(modeloTabla);
         tablaDetalles.setRowHeight(28);
-        tablaDetalles.setSelectionBackground(DORADO);
-        tablaDetalles.setSelectionForeground(Color.BLACK);
+        tablaDetalles.setSelectionBackground(MORADO);
+        tablaDetalles.setSelectionForeground(Color.WHITE);
+        tablaDetalles.setGridColor(DORADO);
+        tablaDetalles.getTableHeader().setBackground(DORADO);
+        tablaDetalles.getTableHeader().setForeground(Color.BLACK);
 
         JScrollPane scroll = new JScrollPane(
                 tablaDetalles
@@ -389,6 +396,9 @@ public class FrmPedidos extends JFrame {
                 "CONFIRMAR PEDIDO"
         );
 
+        btnConfirmar.setBackground(VERDE);
+        btnConfirmar.setForeground(Color.WHITE);
+
         btnConfirmar.addActionListener(
                 e -> confirmarPedido()
         );
@@ -397,6 +407,9 @@ public class FrmPedidos extends JFrame {
                 "COBRAR PEDIDO PENDIENTE"
         );
 
+        btnCobrarPendiente.setBackground(MORADO);
+        btnCobrarPendiente.setForeground(Color.WHITE);
+
         btnCobrarPendiente.addActionListener(
                 e -> cobrarPedidoPendiente()
         );
@@ -404,6 +417,9 @@ public class FrmPedidos extends JFrame {
         JButton btnLimpiar = crearBoton(
                 "Nueva compra"
         );
+
+        btnLimpiar.setBackground(DORADO);
+        btnLimpiar.setForeground(Color.BLACK);
 
         btnLimpiar.addActionListener(
                 e -> nuevaCompra()
