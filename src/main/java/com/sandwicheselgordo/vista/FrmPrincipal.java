@@ -3,8 +3,11 @@ package com.sandwicheselgordo.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,8 +28,8 @@ public class FrmPrincipal extends JFrame {
 
     public FrmPrincipal() {
         setTitle("Sandwiches El Gordo - Sistema Principal");
-        setSize(1050, 680);
-        setMinimumSize(new Dimension(850, 550));
+        setSize(1050, 740);
+        setMinimumSize(new Dimension(850, 620));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -38,99 +41,128 @@ public class FrmPrincipal extends JFrame {
         JPanel principal = new JPanel(new BorderLayout(20, 25));
         principal.setBackground(FONDO);
         principal.setBorder(
-            BorderFactory.createEmptyBorder(35, 45, 35, 45)
+                BorderFactory.createEmptyBorder(35, 45, 35, 45)
         );
 
-        JPanel encabezado = new JPanel(new GridLayout(3, 1, 0, 8));
+        JPanel encabezado = new JPanel(
+                new GridLayout(3, 1, 0, 8)
+        );
         encabezado.setOpaque(false);
 
         JLabel titulo = new JLabel(
-            "SANDWICHES EL GORDO",
-            SwingConstants.CENTER
+                "SANDWICHES EL GORDO",
+                SwingConstants.CENTER
         );
         titulo.setFont(new Font("Serif", Font.BOLD, 34));
         titulo.setForeground(DORADO);
 
         JLabel subtitulo = new JLabel(
-            "SISTEMA DE ADMINISTRACIÓN",
-            SwingConstants.CENTER
+                "SISTEMA DE ADMINISTRACIÓN",
+                SwingConstants.CENTER
         );
         subtitulo.setFont(new Font("Serif", Font.BOLD, 21));
         subtitulo.setForeground(BLANCO);
 
         JLabel descripcion = new JLabel(
-            "Gestión de pedidos, pagos, recompensas y reportes",
-            SwingConstants.CENTER
+                "Gestión de clientes, pedidos, pagos, recompensas y reportes",
+                SwingConstants.CENTER
         );
-        descripcion.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        descripcion.setFont(
+                new Font("SansSerif", Font.PLAIN, 14)
+        );
         descripcion.setForeground(DORADO);
 
         encabezado.add(titulo);
         encabezado.add(subtitulo);
         encabezado.add(descripcion);
 
-        JPanel opciones = new JPanel(new GridLayout(2, 2, 24, 24));
+        JPanel opciones = new JPanel(
+                new GridLayout(3, 2, 20, 20)
+        );
         opciones.setOpaque(false);
         opciones.setBorder(
-            BorderFactory.createEmptyBorder(35, 25, 35, 25)
+                BorderFactory.createEmptyBorder(25, 25, 25, 25)
         );
 
+        JButton btnClientes = crearBoton(
+                "GESTIÓN DE CLIENTES", DORADO
+        );
+        btnClientes.setForeground(Color.BLACK);
+
         JButton btnPedidos = crearBoton(
-            "PEDIDOS Y PAGOS", VERDE
+                "PEDIDOS Y PAGOS", VERDE
         );
 
         JButton btnEstados = crearBoton(
-            "ESTADOS DE PEDIDOS", MORADO
+                "ESTADOS DE PEDIDOS", MORADO
         );
 
         JButton btnCanjes = crearBoton(
-            "RECOMPENSAS Y CANJES", MORADO
+                "RECOMPENSAS Y CANJES", MORADO
         );
 
         JButton btnReportes = crearBoton(
-            "REPORTES", VERDE
+                "REPORTES", VERDE
+        );
+
+        btnClientes.addActionListener(e ->
+                abrirVentana(new FrmClientes())
         );
 
         btnPedidos.addActionListener(e ->
-            abrirVentana(new FrmPedidos())
+                abrirVentana(new FrmPedidos())
         );
 
-       btnEstados.addActionListener(e ->
-    abrirVentana(new FrmGestionPedidos())
-);
+        btnEstados.addActionListener(e ->
+                abrirVentana(new FrmGestionPedidos())
+        );
+
         btnCanjes.addActionListener(e ->
-            abrirVentana(new FrmCanjes())
+                abrirVentana(new FrmCanjes())
         );
 
         btnReportes.addActionListener(e ->
-            abrirVentana(new FrmReportes())
+                abrirVentana(new FrmReportes())
         );
 
+        opciones.add(btnClientes);
         opciones.add(btnPedidos);
         opciones.add(btnEstados);
         opciones.add(btnCanjes);
         opciones.add(btnReportes);
 
+        JPanel espacio = new JPanel();
+        espacio.setOpaque(false);
+        opciones.add(espacio);
+
         JPanel pie = new JPanel(new BorderLayout());
         pie.setOpaque(false);
 
         JLabel estado = new JLabel(
-            "SANDWICHES EL GORDO  |  PANEL PRINCIPAL",
-            SwingConstants.CENTER
+                "SANDWICHES EL GORDO  |  PANEL PRINCIPAL",
+                SwingConstants.CENTER
         );
         estado.setForeground(DORADO);
-        estado.setFont(new Font("Serif", Font.BOLD, 14));
+        estado.setFont(
+                new Font("Serif", Font.BOLD, 14)
+        );
 
-        JButton btnSalir = crearBoton("SALIR DEL SISTEMA", DORADO);
+        JButton btnSalir = crearBoton(
+                "SALIR DEL SISTEMA", DORADO
+        );
         btnSalir.setForeground(Color.BLACK);
-        btnSalir.setPreferredSize(new Dimension(220, 45));
+        btnSalir.setPreferredSize(
+                new Dimension(220, 45)
+        );
 
         btnSalir.addActionListener(e -> {
+
             int respuesta = JOptionPane.showConfirmDialog(
-                this,
-                "¿Desea salir del sistema?",
-                "Confirmar salida",
-                JOptionPane.YES_NO_OPTION
+                    this,
+                    "¿Desea salir del sistema?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
             );
 
             if (respuesta == JOptionPane.YES_OPTION) {
@@ -148,45 +180,48 @@ public class FrmPrincipal extends JFrame {
         setContentPane(principal);
     }
 
-   
+    private JButton crearBoton(String texto, Color fondo) {
 
-private JButton crearBoton(String texto, Color fondo) {
+        JButton boton = new JButton(texto) {
 
-    JButton boton = new JButton(texto);
+            @Override
+            protected void paintComponent(Graphics g) {
 
-    boton.setUI(
-        new javax.swing.plaf.basic.BasicButtonUI()
-    );
+                Graphics2D g2 = (Graphics2D) g.create();
 
-    boton.setBackground(fondo);
+                g2.setColor(getBackground());
+                g2.fillRect(
+                        0, 0,
+                        getWidth(),
+                        getHeight()
+                );
 
-    boton.setForeground(
-        fondo.equals(DORADO) ? Color.BLACK : Color.WHITE
-    );
+                g2.dispose();
 
-    boton.setFont(
-        new Font("Serif", Font.BOLD, 17)
-    );
+                super.paintComponent(g);
+            }
+        };
 
-    boton.setOpaque(true);
-    boton.setContentAreaFilled(true);
-    boton.setFocusPainted(false);
-    boton.setBorderPainted(true);
-    boton.setRolloverEnabled(false);
+        boton.setBackground(fondo);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(
+                new Font("Serif", Font.BOLD, 16)
+        );
 
-    boton.setBorder(
-        BorderFactory.createLineBorder(DORADO, 2)
-    );
+        boton.setFocusPainted(false);
+        boton.setContentAreaFilled(false);
+        boton.setOpaque(false);
 
-    boton.setCursor(
-        new java.awt.Cursor(
-            java.awt.Cursor.HAND_CURSOR
-        )
-    );
+        boton.setBorder(
+                BorderFactory.createLineBorder(DORADO, 2)
+        );
 
-    return boton;
-}
+        boton.setCursor(
+                new Cursor(Cursor.HAND_CURSOR)
+        );
 
+        return boton;
+    }
 
     private void abrirVentana(JFrame ventana) {
         ventana.setLocationRelativeTo(this);
@@ -194,8 +229,9 @@ private JButton crearBoton(String texto, Color fondo) {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() ->
-            new FrmPrincipal().setVisible(true)
-        );
+
+        SwingUtilities.invokeLater(() -> {
+            new FrmPrincipal().setVisible(true);
+        });
     }
 }
