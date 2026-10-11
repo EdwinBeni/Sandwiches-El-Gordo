@@ -1,64 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
+
 package com.sandwicheselgordo;
 
-import com.sandwicheselgordo.dao.ClienteDAO;
-import com.sandwicheselgordo.dao.ProductoDAO;
-import com.sandwicheselgordo.modelo.Cliente;
-import com.sandwicheselgordo.modelo.Producto;
+import com.sandwicheselgordo.vista.FrmPrincipal;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class SandwichesElGordo {
 
     public static void main(String[] args) {
 
-        System.out.println("==============================");
-        System.out.println("     SANDWICHES EL GORDO");
-        System.out.println("==============================");
+        SwingUtilities.invokeLater(() -> {
 
-        ProductoDAO productoDAO = new ProductoDAO();
+            try {
+                UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName()
+                );
+            } catch (Exception e) {
+                System.err.println(
+                    "No se pudo aplicar el estilo del sistema: "
+                    + e.getMessage()
+                );
+            }
 
-        System.out.println();
-        System.out.println("PRODUCTOS REGISTRADOS:");
-        System.out.println("------------------------------");
-
-        for (Producto producto : productoDAO.listar()) {
-
-            System.out.println(
-                    producto.getCodigo()
-                    + " | "
-                    + producto.getNombre()
-                    + " | Q"
-                    + producto.getPrecio()
-                    + " | Stock: "
-                    + producto.getExistencia()
-            );
-        }
-
-        ClienteDAO clienteDAO = new ClienteDAO();
-
-        System.out.println();
-        System.out.println("CLIENTES REGISTRADOS:");
-        System.out.println("------------------------------");
-
-        for (Cliente cliente : clienteDAO.listar()) {
-
-            System.out.println(
-                    cliente.getIdentificacion()
-                    + " | "
-                    + cliente.getNombre()
-                    + " | Puntos: "
-                    + cliente.getPuntos()
-                    + " | Estado: "
-                    + (cliente.isActivo()
-                        ? "Activo"
-                        : "Inactivo")
-            );
-        }
-
-        System.out.println();
-        System.out.println("==============================");
-        System.out.println("       SISTEMA INICIADO");
-        System.out.println("==============================");
+            FrmPrincipal ventana = new FrmPrincipal();
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+        });
     }
 }
