@@ -480,7 +480,7 @@ public class FrmPedidos extends JFrame {
 
     private JButton crearBoton(String texto) {
 
-        JButton boton = new JButton(texto);
+        JButton boton = EstiloBotones.crear(texto);
         boton.setBackground(DORADO);
         boton.setForeground(Color.BLACK);
         boton.setFont(

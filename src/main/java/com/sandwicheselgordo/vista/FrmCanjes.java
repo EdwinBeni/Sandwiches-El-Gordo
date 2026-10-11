@@ -296,7 +296,7 @@ public class FrmCanjes extends JFrame {
     private JButton crearBoton(
             String texto, Color fondo, Color letra) {
 
-        JButton boton = new JButton(texto);
+        JButton boton = EstiloBotones.crear(texto);
 
         boton.setBackground(fondo);
         boton.setForeground(letra);

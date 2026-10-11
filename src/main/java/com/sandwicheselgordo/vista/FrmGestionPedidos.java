@@ -303,7 +303,7 @@ public class FrmGestionPedidos extends JFrame {
 
     private JButton crearBoton(String texto, Color color) {
 
-        JButton boton = new JButton(texto);
+        JButton boton = EstiloBotones.crear(texto);
 
         boton.setBackground(color);
         boton.setForeground(Color.WHITE);

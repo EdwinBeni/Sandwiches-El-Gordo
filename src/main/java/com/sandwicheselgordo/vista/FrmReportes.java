@@ -281,7 +281,7 @@ public class FrmReportes extends JFrame {
             String texto,
             Color fondo) {
 
-        JButton boton = new JButton(texto);
+        JButton boton = EstiloBotones.crear(texto);
 
         boton.setBackground(fondo);
         boton.setForeground(Color.WHITE);
