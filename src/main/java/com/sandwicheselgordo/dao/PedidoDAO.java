@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.sandwicheselgordo.dao;
 
 import com.sandwicheselgordo.modelo.DetallePedido;
@@ -15,7 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PedidoDAO {
 
@@ -132,6 +130,93 @@ public class PedidoDAO {
 
                 throw e;
             }
+        }
+    }
+
+    public List<String[]> listarPedidos() throws SQLException {
+
+        List<String[]> pedidos = new ArrayList<>();
+
+        String sql = """
+                SELECT P.ID_PEDIDO,
+                       C.NOMBRE AS CLIENTE,
+                       P.FECHA,
+                       P.TOTAL,
+                       P.ESTADO,
+                       P.PUNTOS_GENERADOS
+                FROM PEDIDO P
+                INNER JOIN CLIENTE C
+                    ON P.ID_CLIENTE = C.ID_CLIENTE
+                ORDER BY P.ID_PEDIDO DESC
+                """;
+
+        try (Connection cn = ConexionOracle.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                pedidos.add(new String[]{
+                    String.valueOf(rs.getInt("ID_PEDIDO")),
+                    rs.getString("CLIENTE"),
+                    rs.getTimestamp("FECHA").toString(),
+                    String.valueOf(rs.getDouble("TOTAL")),
+                    rs.getString("ESTADO"),
+                    String.valueOf(rs.getInt("PUNTOS_GENERADOS"))
+                });
+            }
+        }
+
+        return pedidos;
+    }
+
+    public boolean marcarEntregado(int idPedido)
+            throws SQLException {
+
+        if (idPedido <= 0) {
+            throw new IllegalArgumentException(
+                    "ID de pedido invalido."
+            );
+        }
+
+        String sql = """
+                UPDATE PEDIDO
+                SET ESTADO = 'ENTREGADO'
+                WHERE ID_PEDIDO = ?
+                  AND ESTADO = 'PAGADO'
+                """;
+
+        try (Connection cn = ConexionOracle.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, idPedido);
+
+            return ps.executeUpdate() == 1;
+        }
+    }
+
+    public boolean anularPendiente(int idPedido)
+            throws SQLException {
+
+        if (idPedido <= 0) {
+            throw new IllegalArgumentException(
+                    "ID de pedido invalido."
+            );
+        }
+
+        String sql = """
+                UPDATE PEDIDO
+                SET ESTADO = 'ANULADO'
+                WHERE ID_PEDIDO = ?
+                  AND ESTADO = 'PENDIENTE'
+                """;
+
+        try (Connection cn = ConexionOracle.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, idPedido);
+
+            return ps.executeUpdate() == 1;
         }
     }
 }

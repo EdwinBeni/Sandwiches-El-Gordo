@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.sandwicheselgordo.servicio;
 
 import com.sandwicheselgordo.dao.PedidoDAO;
@@ -9,6 +6,7 @@ import com.sandwicheselgordo.modelo.DetallePedido;
 import com.sandwicheselgordo.modelo.Pedido;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class PedidoService {
 
@@ -18,7 +16,8 @@ public class PedidoService {
         this.pedidoDAO = new PedidoDAO();
     }
 
-    public int registrarPedido(Pedido pedido) throws SQLException {
+    public int registrarPedido(Pedido pedido)
+            throws SQLException {
 
         if (pedido == null) {
             throw new IllegalArgumentException(
@@ -56,5 +55,36 @@ public class PedidoService {
         }
 
         return pedidoDAO.guardar(pedido);
+    }
+
+    public List<String[]> listarPedidos()
+            throws SQLException {
+
+        return pedidoDAO.listarPedidos();
+    }
+
+    public boolean entregarPedido(int idPedido)
+            throws SQLException {
+
+        validarIdPedido(idPedido);
+
+        return pedidoDAO.marcarEntregado(idPedido);
+    }
+
+    public boolean anularPedido(int idPedido)
+            throws SQLException {
+
+        validarIdPedido(idPedido);
+
+        return pedidoDAO.anularPendiente(idPedido);
+    }
+
+    private void validarIdPedido(int idPedido) {
+
+        if (idPedido <= 0) {
+            throw new IllegalArgumentException(
+                    "El ID del pedido debe ser mayor que cero."
+            );
+        }
     }
 }
