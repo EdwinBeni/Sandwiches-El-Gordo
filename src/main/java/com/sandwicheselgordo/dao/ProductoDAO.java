@@ -239,4 +239,98 @@ public class ProductoDAO {
 
         return producto;
     }
+    
+    
+public List<Object[]> listarCategorias() {
+    List<Object[]> categorias = new ArrayList<>();
+
+    String sql = """
+        SELECT ID_CATEGORIA, NOMBRE
+        FROM CATEGORIA
+        ORDER BY NOMBRE
+        """;
+
+    try (Connection cn = ConexionOracle.getConexion();
+         PreparedStatement ps = cn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            categorias.add(new Object[]{
+                rs.getInt("ID_CATEGORIA"),
+                rs.getString("NOMBRE")
+            });
+        }
+
+    } catch (SQLException e) {
+        throw new IllegalStateException(
+            "No se pudieron cargar las categorías.", e
+        );
+    }
+
+    return categorias;
+}
+
+public void registrarAbastecimiento(
+        int idProducto, int cantidad, String referencia) {
+
+    if (idProducto <= 0 || cantidad <= 0) {
+        throw new IllegalArgumentException(
+            "Seleccione un producto y una cantidad válida."
+        );
+    }
+
+    String actualizar = """
+        UPDATE PRODUCTO
+        SET EXISTENCIA = EXISTENCIA + ?
+        WHERE ID_PRODUCTO = ?
+        """;
+
+    String movimiento = """
+        INSERT INTO MOVIMIENTO_INVENTARIO
+        (ID_PRODUCTO, FECHA, TIPO, CANTIDAD, REFERENCIA)
+        VALUES (?, SYSTIMESTAMP, 'ABASTECIMIENTO', ?, ?)
+        """;
+
+    try (Connection cn = ConexionOracle.getConexion()) {
+
+        cn.setAutoCommit(false);
+
+        try {
+            try (PreparedStatement ps =
+                    cn.prepareStatement(actualizar)) {
+
+                ps.setInt(1, cantidad);
+                ps.setInt(2, idProducto);
+
+                if (ps.executeUpdate() != 1) {
+                    throw new SQLException(
+                        "No se encontró el producto."
+                    );
+                }
+            }
+
+            try (PreparedStatement ps =
+                    cn.prepareStatement(movimiento)) {
+
+                ps.setInt(1, idProducto);
+                ps.setInt(2, cantidad);
+                ps.setString(3, referencia);
+                ps.executeUpdate();
+            }
+
+            cn.commit();
+
+        } catch (SQLException | RuntimeException e) {
+            cn.rollback();
+            throw e;
+        }
+
+    } catch (SQLException e) {
+        throw new IllegalStateException(
+            "No se pudo registrar el abastecimiento: "
+            + e.getMessage(), e
+        );
+    }
+}
+
 }

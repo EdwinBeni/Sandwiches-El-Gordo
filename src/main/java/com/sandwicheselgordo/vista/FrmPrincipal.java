@@ -76,9 +76,8 @@ public class FrmPrincipal extends JFrame {
         encabezado.add(subtitulo);
         encabezado.add(descripcion);
 
-        JPanel opciones = new JPanel(
-                new GridLayout(3, 2, 20, 20)
-        );
+        JPanel opciones = new JPanel(new GridLayout(2, 3, 24, 24));
+       
         opciones.setOpaque(false);
         opciones.setBorder(
                 BorderFactory.createEmptyBorder(25, 25, 25, 25)
@@ -87,6 +86,7 @@ public class FrmPrincipal extends JFrame {
         JButton btnClientes = crearBoton(
                 "GESTIÓN DE CLIENTES", DORADO
         );
+       
         btnClientes.setForeground(Color.BLACK);
 
         JButton btnPedidos = crearBoton(
@@ -96,13 +96,21 @@ public class FrmPrincipal extends JFrame {
         JButton btnEstados = crearBoton(
                 "ESTADOS DE PEDIDOS", MORADO
         );
-
+  JButton btnInventario = crearBoton(
+                "PRODUCTOS E INVENTARIO", VERDE
+        );
         JButton btnCanjes = crearBoton(
                 "RECOMPENSAS Y CANJES", MORADO
         );
 
         JButton btnReportes = crearBoton(
                 "REPORTES", VERDE
+        );
+        
+      
+
+        btnInventario.addActionListener(e ->
+                 abrirVentana(new FrmProductos())
         );
 
         btnClientes.addActionListener(e ->
@@ -130,6 +138,7 @@ public class FrmPrincipal extends JFrame {
         opciones.add(btnEstados);
         opciones.add(btnCanjes);
         opciones.add(btnReportes);
+        opciones.add(btnInventario);
 
         JPanel espacio = new JPanel();
         espacio.setOpaque(false);
