@@ -10,3 +10,10 @@ nbproject/private/
 .DS_Store
 Thumbs.db
 config.properties
+config.local-respaldo.properties
+
+# Credenciales y wallets de Oracle
+config-elgordo.properties
+**/cwallet.sso
+**/ewallet.*
+Wallet_*.zip

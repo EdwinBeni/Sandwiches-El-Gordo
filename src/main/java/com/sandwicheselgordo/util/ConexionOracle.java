@@ -22,6 +22,12 @@ public class ConexionOracle {
                 new FileInputStream("config.properties")) {
 
             PROPIEDADES.load(archivo);
+            String externo = PROPIEDADES.getProperty("db.config.external");
+            if (externo != null && !externo.isBlank()) {
+                try (FileInputStream configuracionExterna = new FileInputStream(externo)) {
+                    PROPIEDADES.load(configuracionExterna);
+                }
+            }
 
         } catch (IOException e) {
             throw new ExceptionInInitializerError(
